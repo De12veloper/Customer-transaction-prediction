@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Transaction Fraud Prediction</title>
+    <style>
+        body { font-family: Arial; background: #f7f7f7; padding: 20px; }
+        .card { width: 400px; margin:auto; background:white; padding:20px; border-radius:10px; box-shadow:0 0 10px #aaa; }
+        input, select { width:100%; padding:10px; margin:10px 0; }
+        button { padding:12px; width:100%; background:green; color:white; border:none; cursor:pointer; font-size:18px; }
+        #result { margin-top:20px; font-weight:bold; font-size:20px; color:blue; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Transaction Fraud Prediction</h2>
+
+    <form id="predictForm">
+        <label>Amount</label>
+        <input type="number" id="Amount" required>
+
+        <label>Old Balance</label>
+        <input type="number" id="OldBalance" required>
+
+        <label>New Balance</label>
+        <input type="number" id="NewBalance" required>
+
+        <label>Transaction Type</label>
+        <select id="Type">
+            <option>Payment</option>
+            <option>Transfer</option>
+            <option>CashOut</option>
+            <option>Debit</option>
+            <option>Credit</option>
+            <option>CashIn</option>
+            <option>Refund</option>
+        </select>
+
+        <label>Gender</label>
+        <select id="Gender">
+            <option>Male</option>
+            <option>Female</option>
+        </select>
+
+        <label>Age</label>
+        <input type="number" id="Age" required>
+
+        <button type="submit">Predict</button>
+    </form>
+
+    <div id="result"></div>
+</div>
+
+<script>
+document.getElementById("predictForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    let payload = {
+        Amount: Number(document.getElementById("Amount").value),
+        OldBalance: Number(document.getElementById("OldBalance").value),
+        NewBalance: Number(document.getElementById("NewBalance").value),
+        Type: document.getElementById("Type").value,
+        Gender: document.getElementById("Gender").value,
+        Age: Number(document.getElementById("Age").value)
+    };
+
+    try {
+        let response = await fetch("/predict", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(payload)
+        });
+
+        let data = await response.json();
+        if(data.status === "success"){
+            let predText = data.prediction === 1 ? "Fraud" : "Not Fraud";
+            document.getElementById("result").innerText = "Prediction: " + predText;
+        } else {
+            document.getElementById("result").innerText = "Error: " + data.error;
+        }
+    } catch(err){
+        console.error(err);
+        document.getElementById("result").innerText = "Request failed!";
+    }
+});
+</script>
+
+</body>
+</html>
