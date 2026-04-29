@@ -32,6 +32,7 @@ Customer-transaction-prediction/
 │── requirements.txt       # Dependencies
 │── README.md              # Documentation
  ```
+
 ⚙️ Installation & Setup
 1️⃣ Clone the Repository
 ```bash
