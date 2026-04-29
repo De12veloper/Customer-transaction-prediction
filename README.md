@@ -65,7 +65,7 @@ Open the notebook and run all cells.
 
 If using Python script:
 ```bash
-python main.py
+python app.py
 ```
 (Update filename if different)
 
